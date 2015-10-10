@@ -32,9 +32,8 @@ int main() {
         while (tmp != 1) {  //将num[i]的（3n+1）处理数 加入key
             if (tmp % 2) {
                 tmp = tmp * 3 + 1;
-            } else {
-                tmp /= 2;
             }
+            tmp /= 2;
             
             if (covered(tmp, key) == false) {
                 key[j] = tmp;
