@@ -1,64 +1,50 @@
 #include <iostream>
-#include <map>
-
 using namespace std;
-
-int game(char a, char b)
-{
-	switch (a) {
-	case 'C': 
-		switch (b) {
-		case 'C': return 0;
-		case 'J': return 1;
-		case 'B': return -1;
-		}
-	case 'J': 
-		switch (b) {
-		case 'C': return -1;
-		case 'J': return 0;
-		case 'B': return 1;
-		}
-	case 'B':
-		switch (b) {
-		case 'C': return 1;
-		case 'J': return -1;
-		case 'B': return 0;
-		}
-	default:
-		break;
-	}
-	return 0;
-}
-
 int main()
 {
-	int n,t;
-	cin >> n;
-	t = n;
-	int cnt_a = 0, cnt_b = 0;
-	map<char, int> jia, yi;
-
-	while (n--) {
-		char a, b;
-		cin >> a >> b;
-
-		int result = game(a, b);
-
-		if (result == 1) {
-			cnt_a++;
-			jia[a]++;
-		}
-		else if (result == -1) {
-			cnt_b++;
-			yi[b]++;
-		}
-
-	}
-	printf("%d %d %d\n", cnt_a, t - cnt_a - cnt_b, cnt_b);
-	printf("%d %d %d\n", cnt_b, t - cnt_a - cnt_b, cnt_a);
-
-	auto win_a = jia.begin(), win_b = yi.begin();
-	printf("%c %c\n", win_a->first, win_b->first);
-	
-	return 0;
+    int draw = 0;
+    int jia[3] = {0}, yi[3] = {0};
+    char cs[] = {'B', 'C','J'};
+    
+    int n;
+    cin >> n;
+    while (n--) {
+        char a, b;
+        cin >> a >> b;
+        
+        if (a == b)
+            ++draw;
+        else if (a == 'B' && b == 'C')
+            ++jia[0];
+        else if (a == 'B' && b == 'J')
+            ++yi[2];
+        else if (a == 'C' && b == 'J')
+            ++jia[1];
+        else if (a == 'C' && b == 'B')
+            ++yi[0];
+        else if (a == 'J' && b == 'B')
+            ++jia[2];
+        else if (a == 'J' && b == 'C')
+            ++yi[1];
+    }
+    
+    int sumJia = jia[0] + jia[1] + jia[2], sumYi = yi[0] + yi[1] + yi[2];
+    printf("%d %d %d\n", sumJia, draw, sumYi);
+    printf("%d %d %d\n", sumYi, draw, sumJia);
+    
+    int maxIndex1 = 0, maxIndex2 = 0;
+    for (int i = 0; i < 3; ++i)
+        if (jia[i] == jia[maxIndex1] && cs[i] < cs[maxIndex1])
+            maxIndex1 = i;
+        else if (jia[i] > jia[maxIndex1])
+            maxIndex1 = i;
+    
+    for (int i = 0; i < 3; ++i)
+        if (yi[i] == yi[maxIndex2] && cs[i] < cs[maxIndex2])
+            maxIndex2 = i;
+        else if (yi[i] > yi[maxIndex2])
+            maxIndex2 = i;
+    
+    printf("%c %c\n", cs[maxIndex1], cs[maxIndex2]);
+    return 0;
 }
